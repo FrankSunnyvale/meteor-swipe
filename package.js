@@ -1,7 +1,7 @@
 Package.describe({
   name: 'leonzhang1109:swipe',
   summary: 'A package for creating apps that swipe between pages',
-  version: '0.0.1',
+  version: '0.0.10',
   git: 'https://github.com/leonzhang1109/meteor-swipe.git'
 });
 

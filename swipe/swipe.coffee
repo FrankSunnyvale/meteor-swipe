@@ -39,7 +39,8 @@ class Swipe
       # the left and right pages
       self.t?.width = $(self.t?.find('.pages')).width()
       # do not animate the window resizing
-      $(self.t.findAll('.animate')).removeClass('animate')
+      if self.t
+        $(self.t.findAll('.animate')).removeClass('animate')
       # re-position the left and right pages.
       self.setLeft self.left
       self.setRight self.right
@@ -64,41 +65,51 @@ class Swipe
           self.moveRight()
 
   clearAnimate: ->
-    $(@t?.findAll('.animate')).removeClass('animate')
+    if @t
+      $(@t.findAll('.animate')).removeClass('animate')
 
   animateAll: ->
-    $(@t.findAll('.page')).addClass('animate')
+    if @t
+      $(@t.findAll('.page')).addClass('animate')
 
   unanimate: (name) ->
-    $(@t.find('.page.'+name)).removeClass('animate')
+    if @t
+      $(@t.find('.page.'+name)).removeClass('animate')
 
   animate: (name) ->
-    $(@t.find('.page.'+name)).addClass('animate')
+    if @t
+      $(@t.find('.page.'+name)).addClass('animate')
 
   animateRight: (name) ->
-    $(@t.find('.page.'+name)).addClass('animate').css 'transform',
+    if @t
+      $(@t.find('.page.'+name)).addClass('animate').css 'transform',
       'translate3d('+@t.width+'px,0,0)'
 
   animateLeft: (name) ->
-    $(@t.find('.page.'+name)).addClass('animate').css 'transform',
-      'translate3d(-'+@t.width+'px,0,0)'
+    if @t
+      $(@t.find('.page.'+name)).addClass('animate').css 'transform',
+        'translate3d(-'+@t.width+'px,0,0)'
 
   animateCenter: (name) ->
-    $(@t.find('.page.'+name)).addClass('animate').css 'transform',
-      'translate3d(0px,0,0)'
+    if @t
+      $(@t.find('.page.'+name)).addClass('animate').css 'transform',
+        'translate3d(0px,0,0)'
 
   # set position regardless of animation
   displayRight: (name) ->
-    $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
-      'translate3d('+@t.width+'px,0,0)'
+    if @t
+      $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
+        'translate3d('+@t.width+'px,0,0)'
 
   displayLeft: (name) ->
-    $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
-      'translate3d(-'+@t.width+'px,0,0)'
+    if @t
+      $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
+        'translate3d(-'+@t.width+'px,0,0)'
 
   displayCenter: (name) ->
-    $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
-      'translate3d(0px,0,0)'
+    if @t
+      $(@t.find('.page.'+name)).css('display', 'block').css 'transform',
+        'translate3d(0px,0,0)'
 
   transitionRight: (name) ->
     print "transitionRight"
@@ -152,7 +163,8 @@ class Swipe
       @hidePage n
 
   hidePage: (name) ->
-    $(@t.find('.page.'+name)).css('display', 'none')
+    if @t
+      $(@t.find('.page.'+name)).css('display', 'none')
 
   setInitialPage: (name) ->
     # hide everything when placing the initial page
@@ -199,14 +211,16 @@ class Swipe
 
     # update the page positions
     if @left
-      $(@t.find('.page.'+@left)).css 'transform',
-        'translate3d(-' + (width - posX) + 'px,0,0)'
+      if @t
+        $(@t.find('.page.'+@left)).css 'transform',
+          'translate3d(-' + (width - posX) + 'px,0,0)'
     if @right
-      $(@t.find('.page.'+@right)).css 'transform',
-        'translate3d(' + (width + posX) + 'px,0,0)'
-
-    $(@t.find('.page.'+@getPage())).css 'transform',
-      'translate3d(' + posX + 'px,0,0)'
+      if @t
+        $(@t.find('.page.'+@right)).css 'transform',
+          'translate3d(' + (width + posX) + 'px,0,0)'
+    if @t
+      $(@t.find('.page.'+@getPage())).css 'transform',
+        'translate3d(' + posX + 'px,0,0)'
 
   animateBack: () ->
     # Animate all pages back into place
@@ -215,15 +229,17 @@ class Swipe
     @animate @getPage()
 
     if @left
-      $(@t.find('.page.'+@left)).css 'transform',
-        'translate3d(-' + @t.width + 'px,0,0)'
+      if @t
+        $(@t.find('.page.'+@left)).css 'transform',
+          'translate3d(-' + @t.width + 'px,0,0)'
 
     if @right
-      $(@t.find('.page.'+@right)).css 'transform',
-        'translate3d(' + @t.width + 'px,0,0)'
-
-    $(@t.find('.page.'+@getPage())).css 'transform',
-      'translate3d(0px,0,0)'
+      if @t
+        $(@t.find('.page.'+@right)).css 'transform',
+          'translate3d(' + @t.width + 'px,0,0)'
+    if @t
+      $(@t.find('.page.'+@getPage())).css 'transform',
+        'translate3d(0px,0,0)'
 
   leftRight: (left, right) ->
     debugPrint 'leftRight'
@@ -242,14 +258,17 @@ class Swipe
 
   shouldControl: ->
     # don't register a click if the page is scrolled or being flicked.
-    if @t.scrolling then return false
-    speedX = 10*@t.velX
-    flickX = @t.changeX + speedX
-    speedY = 10*@t.velY
-    flickY = @t.changeY + speedY
-    Xok = Math.abs(flickX) <= 30 or Math.abs(@t.changeX) <= 10
-    Yok = Math.abs(flickY) <= 30 or Math.abs(@t.changeY) <= 10
-    return Xok and Yok
+    if @t
+      if @t.scrolling then return false
+      speedX = 10*@t.velX
+      flickX = @t.changeX + speedX
+      speedY = 10*@t.velY
+      flickY = @t.changeY + speedY
+      Xok = Math.abs(flickX) <= 30 or Math.abs(@t.changeX) <= 10
+      Yok = Math.abs(flickY) <= 30 or Math.abs(@t.changeY) <= 10
+      return Xok and Yok
+    else
+      return false
 
 
   # These are effectively the same:
